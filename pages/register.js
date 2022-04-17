@@ -1,4 +1,7 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const defaultState = {
   name: '',
@@ -7,7 +10,7 @@ const defaultState = {
 };
 
 const register = () => {
-  const [registerState, setRegisterState] = useState(defaultState)
+  const [registerState, setRegisterState] = useState(defaultState);
 
   const { name, email, password } = registerState;
 
@@ -16,10 +19,18 @@ const register = () => {
     setRegisterState({...registerState, [name]: value})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.table({name, email, password})
+    try {
+      const res = await axios.post('http://localhost:8000/api/register', registerState);
+      toast.success(res.data);
+      resetField(defaultState);
+    } catch (err) {
+      toast.error(err.response.data);
+    }
   }
+
+  const resetField = () => setRegisterState(defaultState);
 
   return (
     <>
