@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { Spin } from 'antd';
 import axios from 'axios';
 
 const defaultState = {
@@ -11,24 +12,31 @@ const defaultState = {
 
 const register = () => {
   const [registerState, setRegisterState] = useState(defaultState);
+  const [loading, setLoading] = useState(false);
 
   const { name, email, password } = registerState;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setRegisterState({...registerState, [name]: value})
-  }
+    setRegisterState({ ...registerState, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = await axios.post('http://localhost:8000/api/register', registerState);
+      const res = await axios.post(
+        'http://localhost:8000/api/register',
+        registerState
+      );
       toast.success(res.data);
       resetField(defaultState);
+      setLoading(false);
     } catch (err) {
       toast.error(err.response.data);
+      setLoading(false);
     }
-  }
+  };
 
   const resetField = () => setRegisterState(defaultState);
 
@@ -67,7 +75,13 @@ const register = () => {
             required
           />
 
-          <button className="w-full mt-2 p-4 rounded bg-cyan-700 hover:bg-cyan-900 text-white text-lg" type="submit">Register</button>
+          <button
+            className="w-full mt-2 p-4 rounded bg-cyan-700 hover:bg-cyan-900 text-white text-lg"
+            type="submit"
+            disabled={loading}
+          >
+            { loading ? <Spin /> : 'Register' }
+          </button>
         </form>
       </section>
     </>
