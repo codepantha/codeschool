@@ -3,6 +3,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { Spin } from 'antd';
 import Link from 'next/link';
+import Input from '../components/Input';
+import Button from '../components/Button';
 import axios from 'axios';
 
 const defaultState = {
@@ -26,10 +28,7 @@ const register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(
-        '/api/register',
-        registerState
-      );
+      const res = await axios.post('/api/register', registerState);
       toast.success(res.data);
       resetField(defaultState);
       setLoading(false);
@@ -48,43 +47,42 @@ const register = () => {
       </header>
       <section className="w-full">
         <form onSubmit={handleSubmit} className="w-11/12 md:w-1/3 mx-auto mt-9">
-          <input
+          <Input
             className="w-full p-4 mb-4 border rounded-md outline-none"
             name="name"
             type="text"
             value={name}
-            onChange={handleChange}
+            handleChange={handleChange}
             placeholder="John Doe"
-            required
+            required={true}
           />
-          <input
+          <Input
             className="w-full p-4 mb-4 border rounded-md outline-none"
             name="email"
             type="email"
             value={email}
-            onChange={handleChange}
+            handleChange={handleChange}
             placeholder="john@testmail.com"
-            required
+            required={true}
           />
-          <input
-            className="w-full p-4 mb-4 border rounded-md outline-none"
+          <Input
             name="password"
             type="password"
             value={password}
-            onChange={handleChange}
+            handleChange={handleChange}
             placeholder="password"
-            required
+            required={true}
           />
 
-          <button
-            className="w-full mt-2 p-4 rounded bg-cyan-700 hover:bg-cyan-900 text-white text-lg"
-            type="submit"
-            disabled={loading}
-          >
-            { loading ? <Spin /> : 'Register' }
-          </button>
-          <p className='p-4 text-center'>Already registered? 
-            <Link href="/login"><a> Login</a></Link> 
+          <Button type="submit" loading={loading}>
+            {loading ? <Spin /> : 'Register'}
+          </Button>
+          
+          <p className="p-4 text-center">
+            Already registered?
+            <Link href="/login">
+              <a> Login</a>
+            </Link>
           </p>
         </form>
       </section>
