@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { Spin } from 'antd';
+import Link from 'next/link';
 import axios from 'axios';
 
 const defaultState = {
@@ -82,6 +83,9 @@ const register = () => {
           >
             { loading ? <Spin /> : 'Register' }
           </button>
+          <p className='p-4 text-center'>Already registered? 
+            <Link href="/login"><a> Login</a></Link> 
+          </p>
         </form>
       </section>
     </>
