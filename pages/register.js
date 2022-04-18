@@ -26,7 +26,7 @@ const register = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        'http://localhost:8000/api/register',
+        '/api/register',
         registerState
       );
       toast.success(res.data);
