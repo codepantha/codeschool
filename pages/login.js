@@ -7,6 +7,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import axios from 'axios';
 import { Context } from '../context';
+import { useRouter } from 'next/router';
 
 const defaultState = {
   email: '',
@@ -16,16 +17,20 @@ const defaultState = {
 const login = () => {
   const [loginState, setLoginState] = useState(defaultState);
   const [loading, setLoading] = useState(false);
+  // destructure loginState
+  const { email, password } = loginState;
 
   const { state, dispatch } = useContext(Context);
-  console.log('USER CONTEXT', state);
+  const router = useRouter();
 
-  const { email, password } = loginState;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginState({ ...loginState, [name]: value });
   };
+
+  const saveToLocalStorage = (user) =>
+    localStorage.setItem('user', JSON.stringify(user));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +38,10 @@ const login = () => {
     try {
       const res = await axios.post('/api/login', loginState);
       dispatch({ type: 'LOGIN', payload: res.data });
+      saveToLocalStorage(res.data);
       resetField(defaultState);
       setLoading(false);
+      router.push('/');
     } catch (err) {
       toast.error(err.response.data);
       setLoading(false);
