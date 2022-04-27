@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { Spin } from 'antd';
@@ -15,13 +15,18 @@ const defaultState = {
 };
 
 const login = () => {
+  // context state
+  const { state, dispatch } = useContext(Context);
+  
+  const router = useRouter();
+
+  // redirect to homepage if user is logged in
+  if (state.user) router.push('/');
+
   const [loginState, setLoginState] = useState(defaultState);
   const [loading, setLoading] = useState(false);
   // destructure loginState
   const { email, password } = loginState;
-
-  const { state, dispatch } = useContext(Context);
-  const router = useRouter();
 
 
   const handleChange = (e) => {

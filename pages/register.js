@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { Spin } from 'antd';
@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import axios from 'axios';
+import { Context } from '../context';
+import { useRouter } from 'next/router';
 
 const defaultState = {
   name: '',
@@ -14,6 +16,12 @@ const defaultState = {
 };
 
 const register = () => {
+  const { state: { user } } = useContext(Context);
+  const router = useRouter();
+
+  // redirect to homepage if user is logged in
+  if (user) router.push('/');
+
   const [registerState, setRegisterState] = useState(defaultState);
   const [loading, setLoading] = useState(false);
 
